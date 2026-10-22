@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Studio, in numbers</title>
+<meta name="description" content="A portfolio of small businesses run by one person and a team of bots. Every probe, every number, updated weekly.">
+<link rel="stylesheet" href="shared/probe.css">
+<style>
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 15px; }
+  th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; font-size: 13px; }
+  td.n { text-align: right; } th.n { text-align: right; }
+  .status { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--line); }
+  .status.live { background: color-mix(in srgb, var(--good) 18%, transparent); color: var(--good); }
+  .status.venture { background: color-mix(in srgb, var(--accent) 25%, transparent); }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 20px 0; }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .tile .big { font-size: 28px; }
+  .tile .small { margin: 0; }
+</style>
+</head>
+<body>
+<header class="wrap"><a class="studio" href="./">The Studio</a></header>
+<main class="wrap">
+  <section class="hero">
+    <h1>One person, a team of bots, many small businesses.</h1>
+    <p class="lede">Every probe we launch is listed here with its real numbers: visits, signups, customers, dollars. Updated every Friday. Quiet ones stay listed. <span id="asof" class="small"></span></p>
+  </section>
+  <section class="tiles" id="tiles"></section>
+  <section>
+    <table id="table">
+      <thead><tr><th>Probe</th><th>Status</th><th class="n">Days live</th><th class="n">Visits</th><th class="n">Signups</th><th class="n">Customers</th><th class="n">Revenue</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="small" id="empty" hidden>Nothing live yet. First probes ship this week.</p>
+  </section>
+  <section id="learned"><h2>What we learned</h2><ul id="learned-list" class="small"></ul></section>
+</main>
+<footer class="wrap small"><p>Numbers come from the payment and analytics dashboards, not estimates. A note on method: we launch cheap, measure, and give attention to what grows.</p></footer>
+<script>
+fetch("dashboard.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (d) {
+  document.getElementById("asof").textContent = d.asOf ? "As of " + d.asOf + "." : "";
+  var probes = d.probes || [];
+  var sum = function (k) { return probes.reduce(function (a, p) { return a + (+p[k] || 0); }, 0); };
+  var live = probes.filter(function (p) { return p.status === "live" || p.status === "venture"; }).length;
+  var tiles = [["Probes live", live], ["Signups", sum("signups")], ["Customers", sum("customers")], ["Revenue", "$" + sum("revenue").toLocaleString("en-US")]];
+  document.getElementById("tiles").innerHTML = tiles.map(function (t) { return '<div class="tile"><div class="big">' + t[1] + '</div><p class="small">' + t[0] + '</p></div>'; }).join("");
+  var tb = document.querySelector("#table tbody");
+  if (!probes.length) { document.getElementById("empty").hidden = false; document.getElementById("table").hidden = true; }
+  var today = new Date();
+  tb.innerHTML = probes.map(function (p) {
+    var days = p.launched ? Math.max(0, Math.round((today - new Date(p.launched)) / 864e5)) : "—";
+    var name = p.url ? '<a href="' + p.url + '">' + p.name + '</a>' : p.name;
+    return "<tr><td>" + name + '<br><span class="small">' + (p.offer || "") + "</span></td><td><span class=\"status " + p.status + '">' + p.status + "</span></td><td class=\"n\">" + days + '</td><td class="n">' + (p.visits ?? "—") + '</td><td class="n">' + (p.signups ?? "—") + '</td><td class="n">' + (p.customers ?? "—") + '</td><td class="n">$' + (+p.revenue || 0).toLocaleString("en-US") + "</td></tr>";
+  }).join("");
+  document.getElementById("learned-list").innerHTML = (d.learned || []).map(function (l) { return "<li>" + l + "</li>"; }).join("") || "<li>Nothing yet. The first lesson lands with the first probe.</li>";
+}).catch(function () { document.getElementById("empty").hidden = false; });
+</script>
+</body>
+</html>

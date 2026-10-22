@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What you're really buying</title>
+<meta name="description" content="Paste the numbers from any business-for-sale listing and see the earnings you'd actually take home, a fair price range, and the questions to ask the broker.">
+<link rel="stylesheet" href="../shared/probe.css">
+<script src="config.js"></script>
+</head>
+<body>
+<header class="wrap">
+  <a class="studio" href="../">← <span data-studio-name>The Studio</span></a>
+  <p class="disclaimer" data-disclaimer>Educational analysis, not financial, legal or tax advice. Verify everything with your own advisors before you buy anything.</p>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>That listing's cash flow isn't what you'd take home.</h1>
+    <p class="lede">Sellers report earnings before someone replaces them, before the roof needs work, and with every "one-time" expense added back. Enter the listing's numbers and see what's left, and what a fair price looks like.</p>
+  </section>
+
+  <section class="tool" id="tool">
+    <h2>Adjusted-earnings calculator</h2>
+    <form id="tool-form" onsubmit="return false" autocomplete="off">
+      <div class="row">
+        <label>Asking price <input type="text" name="asking" inputmode="decimal" placeholder="750,000"></label>
+        <label>Cash flow / SDE in the listing <small>Seller's discretionary earnings, as listed</small><input type="text" name="sde" inputmode="decimal" placeholder="250,000"></label>
+      </div>
+      <div class="row">
+        <label>Annual revenue <small>Optional. Used for a capex reserve and a sanity check.</small><input type="text" name="revenue" inputmode="decimal" placeholder="1,200,000"></label>
+        <label>Add-backs claimed <small>Total of the "add-backs" or "adjustments" line, if shown</small><input type="text" name="addbacks" inputmode="decimal" placeholder="60,000"></label>
+      </div>
+      <div class="row">
+        <label>Share of add-backs you could verify today
+          <select name="verify">
+            <option value="1">All of them (documented)</option>
+            <option value="0.5" selected>About half (typical pre-NDA)</option>
+            <option value="0.25">A quarter</option>
+            <option value="0">None (nothing shown yet)</option>
+          </select></label>
+        <label>Salary to replace the owner <small>What you'd pay a manager to run it without you</small><input type="text" name="salary" inputmode="decimal" value="65,000"></label>
+      </div>
+      <div class="row">
+        <label>Capex reserve <small>% of revenue set aside for equipment, vehicles, refresh</small>
+          <select name="capex">
+            <option value="0.01">1% (light: services, online)</option>
+            <option value="0.02" selected>2% (typical Main Street)</option>
+            <option value="0.04">4% (heavy: fleets, kitchens, machines)</option>
+          </select></label>
+        <label>Rent gap per year <small>Market rent minus current rent, if the lease is below market or expiring. 0 if unknown.</small><input type="text" name="rent" inputmode="decimal" placeholder="0"></label>
+      </div>
+      <label>Multiple range for this kind of business
+        <select name="mult">
+          <option value="1.5,2.5">1.5–2.5× (owner-operated, under $200k earnings)</option>
+          <option value="2,3" selected>2–3× (typical Main Street, $200k–$1M earnings)</option>
+          <option value="2.5,3.5">2.5–3.5× (manager-run, recurring revenue)</option>
+          <option value="3,4.5">3–4.5× (strong recurring, $1M+ earnings)</option>
+        </select></label>
+      <button type="button" class="primary" id="run">Show me what I'd really buy</button>
+    </form>
+    <div id="result" class="result" hidden></div>
+  </section>
+
+  <section class="paid" id="paid">
+    <h2>$49: a teardown of the actual listing, within a day</h2>
+    <p>Send the listing link. You get back the red flags in that specific listing, the adjusted earnings with the reasoning shown, a fair price range, the ten questions to ask the broker before you sign an NDA, and the three answers that mean walk away.</p>
+    <a class="primary" id="paid-cta" href="#" target="_blank" rel="noopener">Loading…</a>
+    <p class="small" id="paid-note"></p>
+  </section>
+
+  <section class="capture" id="capture">
+    <h2>Email me this result</h2>
+    <p class="small">One question so the next version is better: what kind of business are you looking at, and where are you in the process?</p>
+    <div id="capture-slot"></div>
+  </section>
+</main>
+
+<footer class="wrap small">
+  <p data-disclaimer-footer></p>
+  <p>Multiples and reserves are starting points from public Main Street transaction ranges, not a valuation. A probe from <span data-studio-name>The Studio</span>. Numbers for every probe are public on the <a href="../">dashboard</a>.</p>
+</footer>
+
+<script src="../shared/probe.js"></script>
+<script src="tool.js"></script>
+</body>
+</html>
