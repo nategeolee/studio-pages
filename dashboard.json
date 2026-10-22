@@ -1,7 +1,7 @@
 {
   "asOf": "2026-10-21",
   "probes": [
-    { "slug": "listing-teardown", "name": "Listing Teardown", "offer": "Adjusted earnings for any business-for-sale listing; $49 teardown", "status": "build", "launched": "", "url": "listing-teardown/", "visits": 0, "signups": 0, "customers": 0, "revenue": 0 }
+    { "slug": "listing-teardown", "name": "Listing Teardown", "offer": "Adjusted earnings for any business-for-sale listing; $49 teardown", "status": "live", "launched": "2026-10-21", "url": "listing-teardown/", "visits": 0, "signups": 0, "customers": 0, "revenue": 0 }
   ],
   "learned": []
 }
