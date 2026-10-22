@@ -24,6 +24,19 @@
     <h2>Adjusted-earnings calculator</h2>
     <form id="tool-form" onsubmit="return false" autocomplete="off">
       <div class="row">
+        <label>What kind of business
+          <select name="industry">
+            <option value="carwash">Car wash</option>
+            <option value="laundromat">Laundromat</option>
+            <option value="homeservices" selected>Home services (HVAC, plumbing, cleaning…)</option>
+            <option value="auto">Auto repair</option>
+            <option value="restaurant">Restaurant or café</option>
+            <option value="ecommerce">E-commerce or online</option>
+            <option value="other">Something else</option>
+          </select></label>
+        <label>State <small>Optional</small><input type="text" name="state" maxlength="2" placeholder="UT" style="text-transform:uppercase"></label>
+      </div>
+      <div class="row">
         <label>Asking price <input type="text" name="asking" inputmode="decimal" placeholder="750,000"></label>
         <label>Cash flow / SDE in the listing <small>Seller's discretionary earnings, as listed</small><input type="text" name="sde" inputmode="decimal" placeholder="250,000"></label>
       </div>
@@ -50,14 +63,20 @@
           </select></label>
         <label>Rent gap per year <small>Market rent minus current rent, if the lease is below market or expiring. 0 if unknown.</small><input type="text" name="rent" inputmode="decimal" placeholder="0"></label>
       </div>
-      <label>Multiple range for this kind of business
+      <label>Multiple range <small>Set by the business type above; change it if you know better</small>
         <select name="mult">
           <option value="1.5,2.5">1.5–2.5× (owner-operated, under $200k earnings)</option>
           <option value="2,3" selected>2–3× (typical Main Street, $200k–$1M earnings)</option>
           <option value="2.5,3.5">2.5–3.5× (manager-run, recurring revenue)</option>
           <option value="3,4.5">3–4.5× (strong recurring, $1M+ earnings)</option>
         </select></label>
+      <div class="row">
+        <label>Down payment <small>SBA 7(a) loans usually need about 10%</small>
+          <select name="down"><option value="0.1" selected>10%</option><option value="0.2">20%</option><option value="0.3">30%</option><option value="1">All cash</option></select></label>
+        <label>Loan rate <small>Ask your lender; edit this</small><input type="text" name="rate" inputmode="decimal" value="10.5%"></label>
+      </div>
       <button type="button" class="primary" id="run">Show me what I'd really buy</button>
+      <p class="small" style="margin:0">The numbers you enter are saved anonymously to improve this tool. No name, no email.</p>
     </form>
     <div id="result" class="result" hidden></div>
   </section>
@@ -70,9 +89,21 @@
   </section>
 
   <section class="capture" id="capture">
-    <h2>Email me this result</h2>
-    <p class="small">One question so the next version is better: what kind of business are you looking at, and where are you in the process?</p>
-    <div id="capture-slot"></div>
+    <h2>One real listing, torn down, every week</h2>
+    <p class="small">Free. A real business-for-sale listing run through the full teardown, plus first access to the $49 teardown and alerts for the kind of business you're looking at. Unsubscribe anytime.</p>
+    <form id="capture-form" onsubmit="return false">
+      <label>Email <input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></label>
+      <label>Where are you in the process?
+        <select name="stage">
+          <option value="browsing">Just browsing listings</option>
+          <option value="broker">Talking to a broker</option>
+          <option value="nda">Under NDA or LOI</option>
+          <option value="advisor">Advising a buyer (lender, CPA, attorney)</option>
+          <option value="seller">Selling or brokering</option>
+        </select></label>
+      <button type="button" class="primary" id="capture-btn">Send me the weekly teardown</button>
+      <p class="small" id="capture-msg" aria-live="polite"></p>
+    </form>
   </section>
 </main>
 

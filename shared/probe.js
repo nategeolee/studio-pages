@@ -1,5 +1,6 @@
-// Shared probe wiring: reads window.PROBE (config.js) and fills the studio name,
-// the paid CTA (payment link or waitlist), the capture slot, and the analytics beacon.
+// Shared probe wiring: reads window.PROBE (config.js), fills the studio name and the paid CTA
+// (payment link, else waitlist anchor, else disabled), submits to the probe's form in the background,
+// and loads the analytics beacon.
 (function () {
   var P = window.PROBE || {};
   document.querySelectorAll("[data-studio-name]").forEach(function (el) { el.textContent = P.studioName || "The Studio"; });
@@ -8,33 +9,37 @@
   var discFoot = document.querySelector("[data-disclaimer-footer]");
   if (disc && discFoot && disc.textContent.trim()) discFoot.textContent = disc.textContent.trim();
 
+  var hasForm = !!(P.form && P.form.action);
+  window.probeHasForm = hasForm;
+
   var cta = document.getElementById("paid-cta");
   var note = document.getElementById("paid-note");
   if (cta) {
     if (P.paymentLinkUrl) {
       cta.href = P.paymentLinkUrl; cta.textContent = P.paidLabel || "Buy";
       if (note) note.textContent = "Card checkout by Stripe. Delivered by email.";
-    } else if (P.formUrl) {
-      cta.href = P.formUrl; cta.textContent = P.waitlistLabel || "Join the waitlist";
-      if (note) note.textContent = "Checkout opens soon. Waitlist gets it first, at the launch price.";
+    } else if (hasForm) {
+      cta.href = "#capture"; cta.removeAttribute("target"); cta.textContent = P.waitlistLabel || "Join the waitlist";
+      if (note) note.textContent = "Checkout opens soon. The waitlist gets it first, at the launch price.";
     } else {
       cta.setAttribute("aria-disabled", "true"); cta.textContent = "Opening shortly";
     }
   }
 
-  var slot = document.getElementById("capture-slot");
-  if (slot) {
-    if (P.formUrl) {
-      var a = document.createElement("a");
-      a.className = "primary"; a.href = P.formUrl; a.target = "_blank"; a.rel = "noopener";
-      a.textContent = "Send me the result";
-      slot.appendChild(a);
-    } else {
-      slot.innerHTML = '<p class="small">Waitlist opens shortly.</p>';
-    }
-  }
+  // Background submit to the probe's Google Form (studio/stack/form-setup.gs). Fire and forget.
+  // window.submitProbe({type: "run" | "signup", ...fields}) returns true if sent.
+  window.submitProbe = function (data) {
+    if (!hasForm) return false;
+    data.ref = data.ref || (document.referrer || "direct").slice(0, 200);
+    var body = new URLSearchParams();
+    Object.keys(data).forEach(function (k) {
+      if (P.form.entries[k] && data[k] !== "" && data[k] != null) body.append(P.form.entries[k], String(data[k]).slice(0, 500));
+    });
+    try { fetch(P.form.action, { method: "POST", mode: "no-cors", body: body }).catch(function () {}); } catch (e) { return false; }
+    return true;
+  };
 
-  // Copy-to-clipboard helper for tool pages: window.copyText(text, buttonEl)
+  // Copy-to-clipboard helper: window.copyText(text, buttonEl)
   window.copyText = function (text, btn) {
     if (!navigator.clipboard) return;
     navigator.clipboard.writeText(text).then(function () {
