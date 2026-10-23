@@ -50,18 +50,22 @@
     var salary = num(form, "salary"), capexPct = parseFloat(form.elements.capex.value), rent = num(form, "rent");
     var m = form.elements.mult.value.split(",").map(parseFloat), mLo = m[0], mHi = m[1];
     var down = parseFloat(form.elements.down.value), rate = num(form, "rate") || 10.5;
+    var re = Math.min(num(form, "realestate"), asking);
 
     if (!sde || !asking) { out.hidden = false; out.innerHTML = '<p class="flag bad">Enter at least the asking price and the listed cash flow.</p>'; return; }
 
     var unverified = addbacks * (1 - verify);
     var capex = revenue * capexPct;
     var adjusted = sde - unverified - salary - capex - rent;
-    var fairLo = adjusted * mLo, fairHi = adjusted * mHi;
+    // With property included: value the business on earnings after a market rent (assumed 7.5% of property value), then add the property.
+    var mktRent = re * 0.075, bizEarn = adjusted - mktRent;
+    var fairLo = bizEarn * mLo + re, fairHi = bizEarn * mHi + re;
     var askMultListed = asking / sde;
     var askMultAdj = adjusted > 0 ? asking / adjusted : NaN;
     var gap = asking - fairHi;
     var loan = asking * (1 - down);
-    var debt = annualDebtService(loan, rate, 10);
+    // SBA-style split: property portion amortizes over 25 years, the business over 10.
+    var debt = annualDebtService(re * (1 - down), rate, 25) + annualDebtService((asking - re) * (1 - down), rate, 10);
     var dscr = debt > 0 ? adjusted / debt : NaN;
     var cashLeft = adjusted - debt;
 
@@ -71,11 +75,12 @@
     else if (debt > 0 && dscr < 1.5) flags.push(['warn', "The loan works on paper (" + dscr.toFixed(2) + "× coverage) but leaves little room for a bad year. One lost customer or one broken machine and you're short."]);
     if (addbacks / sde > 0.3) flags.push(['bad', "Add-backs are " + Math.round(100 * addbacks / sde) + "% of the listed earnings. Above 30% is where sellers do most of their inflating. Ask for every one, with documents."]);
     else if (addbacks / sde > 0.15) flags.push(['warn', "Add-backs are " + Math.round(100 * addbacks / sde) + "% of listed earnings. Normal, but verify each one before you believe the total."]);
-    if (askMultListed > mHi + 0.5) flags.push(['bad', "Asking price is " + askMultListed.toFixed(1) + "× the listed earnings, above the top of the usual range for a " + label + " even before adjustments."]);
-    else if (isFinite(askMultAdj) && askMultAdj > mHi) flags.push(['warn', "Looks fair on the listing's numbers (" + askMultListed.toFixed(1) + "×) but is " + askMultAdj.toFixed(1) + "× what you'd actually earn."]);
+    if (re === 0 && askMultListed > mHi + 0.5) flags.push(['bad', "Asking price is " + askMultListed.toFixed(1) + "× the listed earnings, above the top of the usual range for a " + label + " even before adjustments."]);
+    else if (re === 0 && isFinite(askMultAdj) && askMultAdj > mHi) flags.push(['warn', "Looks fair on the listing's numbers (" + askMultListed.toFixed(1) + "×) but is " + askMultAdj.toFixed(1) + "× what you'd actually earn."]);
     if (revenue > 0 && sde / revenue > 0.4 && industry !== "laundromat" && industry !== "carwash") flags.push(['warn', "Listed earnings are " + Math.round(100 * sde / revenue) + "% of revenue. Margins that high are rare for a " + label + "; they usually mean unpaid owner labor or missing costs."]);
     if (!revenue) flags.push(['warn', "No revenue entered, so no capex reserve and no margin check. Listings that hide revenue usually have a reason."]);
-    if (rent === 0 && industry !== "ecommerce") flags.push(['warn', "Rent gap set to 0. A below-market lease that resets at renewal is the most common surprise after closing. Ask for the lease."]);
+    if (re > 0) flags.push(['warn', "The price includes " + fmt$(re) + " of real estate. You're buying property plus a business, so judge it on what's left after the loan, not on the listed cash flow. Owning the property is the upside; it just doesn't pay you this year."]);
+    if (rent === 0 && re === 0 && industry !== "ecommerce") flags.push(['warn', "Rent gap set to 0. A below-market lease that resets at renewal is the most common surprise after closing. Ask for the lease."]);
     if (!flags.some(function (f) { return f[0] === 'bad'; })) flags.unshift(['good', "No deal-breakers on the numbers as entered. The teardown checks what the calculator can't: the add-back list itself, the lease, the trend, and the broker's language."]);
 
     last = { industry: industry, state: state, asking: asking, sde: sde, revenue: revenue, addbacks: addbacks, verify: verify,
@@ -101,13 +106,13 @@
         '<dt>Rent gap</dt><dd>' + fmt$(-rent) + '</dd>' +
       '</dl>' +
       '<dl class="kv">' +
-        '<dt>Fair price range at ' + mLo + '–' + mHi + '× adjusted</dt><dd>' + fmt$(fairLo) + ' – ' + fmt$(fairHi) + '</dd>' +
-        '<dt>Asking price</dt><dd>' + fmt$(asking) + (isFinite(askMultAdj) ? ' (' + askMultAdj.toFixed(1) + '× adjusted)' : '') + '</dd>' +
+        '<dt>Fair price range at ' + mLo + '–' + mHi + '× ' + (re > 0 ? 'earnings after a market rent (7.5% of property), plus the property' : 'adjusted') + '</dt><dd>' + fmt$(fairLo) + ' – ' + fmt$(fairHi) + '</dd>' +
+        '<dt>Asking price</dt><dd>' + fmt$(asking) + (re === 0 && isFinite(askMultAdj) ? ' (' + askMultAdj.toFixed(1) + '× adjusted)' : '') + '</dd>' +
         '<dt>' + (gap > 0 ? 'Asking is above the range by' : 'Asking is inside or below the range by') + '</dt><dd>' + fmt$(Math.abs(gap)) + '</dd>' +
       '</dl>' +
       (debt > 0 ?
       '<dl class="kv">' +
-        '<dt>Loan (' + Math.round((1 - down) * 100) + '% of asking, 10 yrs at ' + rate + '%)</dt><dd>' + fmt$(loan) + '</dd>' +
+        '<dt>Loan (' + Math.round((1 - down) * 100) + '% of asking at ' + rate + '%' + (re > 0 ? '; property over 25 yrs, business over 10' : ', 10 yrs') + ')</dt><dd>' + fmt$(loan) + '</dd>' +
         '<dt>Payments per year</dt><dd>' + fmt$(-debt) + '</dd>' +
         '<dt>Coverage (lenders commonly want 1.25×+)</dt><dd>' + (isFinite(dscr) ? dscr.toFixed(2) + '×' : '—') + '</dd>' +
         '<dt>Cash left for you each year</dt><dd>' + fmt$(cashLeft) + '</dd>' +

@@ -61,7 +61,11 @@
             <option value="0.02" selected>2% (typical Main Street)</option>
             <option value="0.04">4% (heavy: fleets, kitchens, machines)</option>
           </select></label>
-        <label>Rent gap per year <small>Market rent minus current rent, if the lease is below market or expiring. 0 if unknown.</small><input type="text" name="rent" inputmode="decimal" placeholder="0"></label>
+        <label>Rent gap per year <small>Market rent minus current rent, if the lease is below market or expiring. 0 if unknown or you're buying the property.</small><input type="text" name="rent" inputmode="decimal" placeholder="0"></label>
+      </div>
+      <div class="row">
+        <label>Real estate included in the price <small>Its listed value, if the sale includes the property. 0 if leased.</small><input type="text" name="realestate" inputmode="decimal" placeholder="0"></label>
+        <span></span>
       </div>
       <label>Multiple range <small>Set by the business type above; change it if you know better</small>
         <select name="mult">
