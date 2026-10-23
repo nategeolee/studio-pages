@@ -8,6 +8,6 @@ window.PROBE = {
   paymentLinkUrl: "",                        // Stripe Payment Link, $49 "Listing teardown" (live)
   paidLabel: "Get the $49 teardown",
   waitlistLabel: "Join the waitlist",
-  cfBeaconToken: "",                         // Cloudflare Web Analytics token
+  cfBeaconToken: "9410894e9e6a44709dacf789117d0cad", // Cloudflare Web Analytics, site nategeolee.github.io (Nate 10-23)
   dashboardUrl: "../"
 };
