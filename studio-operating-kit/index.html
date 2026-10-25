@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guardrails for a team of AI agents</title>
+<meta name="description" content="A free 10-question guardrail check for anyone running several AI agents unattended: your score, your gaps, and what closes each one.">
+<link rel="stylesheet" href="../shared/probe.css">
+<script src="config.js"></script>
+</head>
+<body>
+<header class="wrap">
+  <a class="studio" href="../">← <span data-studio-name>The Studio</span></a>
+  <p class="disclaimer" data-disclaimer>Templates and a checklist, not a guarantee. You are responsible for what your own agents do.</p>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Your agents ran all night. Do you know what they spent?</h1>
+    <p class="lede">Ten yes-or-no questions show where an unattended agent team can surprise you, and what closes each gap. The kit is the operating system this Studio's own bots run on: house rules, approval gates, the trust ladder and the templates.</p>
+  </section>
+
+  <section class="tool" id="tool">
+    <h2>The 10-question guardrail check</h2>
+    <form id="tool-form" onsubmit="return false" autocomplete="off">
+      <div id="questions"></div>
+      <button type="button" class="primary" id="run">Score my agent team</button>
+      <p class="small" style="margin:0" id="run-note">Answers stay in your browser.</p>
+    </form>
+    <div id="result" class="result" hidden></div>
+  </section>
+
+  <section class="paid" id="paid">
+    <h2>$79: the operating kit we actually run</h2>
+    <p>House rules, approval gates, the trust ladder, config and skill templates, the daily operator check, and the desk and status-page formats, as plain files you adapt. It's documents, not software: nothing connects to your agents, logs or keys.</p>
+    <a class="primary" id="paid-cta" href="#" target="_blank" rel="noopener">Loading…</a>
+    <p class="small" id="paid-note"></p>
+  </section>
+
+  <section class="capture" id="capture">
+    <h2>Get the kit first</h2>
+    <p class="small">The waitlist gets the kit first, at the launch price. One question so we build the right parts.</p>
+    <form id="capture-form" onsubmit="return false">
+      <label>How many agents do you run unattended?
+        <select name="agents">
+          <option value="none">None yet</option>
+          <option value="1">1</option>
+          <option value="2-5" selected>2–5</option>
+          <option value="6+">6 or more</option>
+        </select></label>
+      <label>Email <input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></label>
+      <button type="button" class="primary" id="capture-btn">Put me on the list</button>
+      <p class="small" id="capture-msg" aria-live="polite"></p>
+    </form>
+  </section>
+</main>
+
+<footer class="wrap small">
+  <p data-disclaimer-footer></p>
+  <p>A probe from <span data-studio-name>The Studio</span>. Numbers for every probe are public on the <a href="../">dashboard</a>.</p>
+</footer>
+
+<script src="../shared/probe.js"></script>
+<script src="tool.js"></script>
+</body>
+</html>
