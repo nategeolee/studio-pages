@@ -25,8 +25,6 @@
       '<label style="display:inline-flex;gap:6px;align-items:center"><input type="radio" name="' + x.id + '" value="no" style="width:auto"> No / not sure</label></fieldset>';
   }).join("");
 
-  if (window.probeHasForm) document.getElementById("run-note").textContent = "Your score and gaps are saved anonymously to improve this check. No name, no email.";
-
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
   document.getElementById("run").addEventListener("click", function () {
@@ -55,7 +53,6 @@
     }
     out.innerHTML = html;
     last = { score: score, gaps: gaps.map(function (g) { return g.id; }).join(" ") || "none" };
-    submitProbe({ type: "run", score: last.score, gaps: last.gaps });
   });
 
   var cf = document.getElementById("capture-form"), msg = document.getElementById("capture-msg");
@@ -63,8 +60,8 @@
   document.getElementById("capture-btn").addEventListener("click", function () {
     var email = String(cf.elements.email.value || "").trim();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { msg.textContent = "That email doesn't look right."; return; }
-    var d = { type: "signup", email: email, agents: cf.elements.agents.value };
-    if (last) { d.score = last.score; d.gaps = last.gaps; }
+    // Shared with probe 1's form: send only type, email, stage (agent count) and ref, so counts split by ref.
+    var d = { type: "signup", email: email, stage: "agents " + cf.elements.agents.value, ref: "studio-operating-kit" };
     if (submitProbe(d)) { msg.textContent = "You're on the list. You'll hear from us when the kit opens."; cf.elements.email.value = ""; }
     else msg.textContent = "Sign-ups open shortly.";
   });
