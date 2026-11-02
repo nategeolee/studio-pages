@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-29",
+  "asOf": "2026-11-02",
   "probes": [
     {
       "slug": "listing-teardown",
@@ -20,6 +20,18 @@
       "status": "live",
       "launched": "2026-10-25",
       "url": "studio-operating-kit/",
+      "visits": 0,
+      "signups": 0,
+      "customers": 0,
+      "revenue": 0
+    },
+    {
+      "slug": "cold-quote-sorter",
+      "name": "Cold Quote Sorter",
+      "offer": "Free in-browser sorter: ranked call list and follow-up texts for open trade quotes; $49/month weekly sweep (waitlist)",
+      "status": "live",
+      "launched": "2026-11-02",
+      "url": "cold-quote-sorter/",
       "visits": 0,
       "signups": 0,
       "customers": 0,

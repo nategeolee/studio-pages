@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who to call first on your open quotes</title>
+<meta name="description" content="A free in-browser sorter for HVAC, plumbing, roofing and painting shops: paste your open quotes, get a ranked call list, drafted follow-up texts and a call script.">
+<link rel="stylesheet" href="../shared/probe.css">
+<script src="config.js"></script>
+</head>
+<body>
+<header class="wrap">
+  <a class="studio" href="../">← <span data-studio-name>The Studio</span></a>
+  <p class="disclaimer" data-disclaimer>Drafts only. You choose what to send, from your own phone or CRM.</p>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Your open quotes are going cold. Here's who to call first.</h1>
+    <p class="lede">Paste or upload your open-quotes export and get a ranked call list, three follow-up texts per quote and a call script for your top ten. It runs in your browser: nothing is uploaded, stored or sent.</p>
+  </section>
+
+  <section class="tool" id="tool">
+    <h2>The cold-quote sorter</h2>
+    <form id="tool-form" onsubmit="return false" autocomplete="off">
+      <label>Open quotes (CSV with a header row: customer, quote value, quote date, last contact date)
+        <textarea name="csv" id="csv" rows="7" spellcheck="false" style="width:100%;font:14px/1.4 ui-monospace,Menlo,monospace;padding:10px;border:1px solid var(--line);border-radius:8px;background:transparent;color:inherit" placeholder="customer,quote value,quote date,last contact date"></textarea></label>
+      <div class="row">
+        <label>Or upload a CSV file <input type="file" id="file" accept=".csv,text/csv,text/plain"></label>
+      </div>
+      <p class="small" style="margin:0">No export handy? <a href="#" id="sample">Try the sample quotes</a> · <a href="#" id="sample-dl" download="sample-open-quotes.csv">download the sample CSV</a></p>
+      <div id="mapping" hidden>
+        <p class="small" style="margin:8px 0 0">Check which column is which:</p>
+        <div class="row">
+          <label>Customer <select name="m_customer"></select></label>
+          <label>Quote value <select name="m_value"></select></label>
+        </div>
+        <div class="row">
+          <label>Quote date <select name="m_date"></select></label>
+          <label>Last contact date <select name="m_touch"></select></label>
+        </div>
+      </div>
+      <label>Your name or shop name (goes in the drafts) <input type="text" name="sender" placeholder="Sam at Acme Heating"></label>
+      <button type="button" class="primary" id="run">Sort my quotes</button>
+      <p class="small" style="margin:0">Your quotes stay in your browser. We count that the sorter ran and how many rows, nothing else.</p>
+    </form>
+    <div id="result" class="result" hidden></div>
+  </section>
+
+  <section class="paid" id="paid">
+    <h2>$49/month: the weekly sweep, done for you</h2>
+    <p>Send us your open-quotes export once a week and get back the ranked list and the drafted texts, ready to send from your own phone or CRM. We never log into your software, text your customers or keep their data.</p>
+    <a class="primary" id="paid-cta" href="#" target="_blank" rel="noopener">Loading…</a>
+    <p class="small" id="paid-note"></p>
+  </section>
+
+  <section class="capture" id="capture">
+    <h2>Get the weekly sweep first</h2>
+    <p class="small">The waitlist gets it first, at the launch price. One question so it fits your setup.</p>
+    <form id="capture-form" onsubmit="return false">
+      <label>What do you send quotes from?
+        <select name="software">
+          <option value="jobber">Jobber</option>
+          <option value="servicetitan">ServiceTitan</option>
+          <option value="housecall-pro">Housecall Pro</option>
+          <option value="paper-or-spreadsheet">Paper or a spreadsheet</option>
+          <option value="other">Other</option>
+        </select></label>
+      <label>Email <input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></label>
+      <button type="button" class="primary" id="capture-btn">Put me on the list</button>
+      <p class="small" id="capture-msg" aria-live="polite"></p>
+    </form>
+  </section>
+</main>
+
+<footer class="wrap small">
+  <p data-disclaimer-footer></p>
+  <p>A probe from <span data-studio-name>The Studio</span>. Numbers for every probe are public on the <a href="../">dashboard</a>.</p>
+</footer>
+
+<script src="../shared/probe.js"></script>
+<script src="tool.js"></script>
+</body>
+</html>
