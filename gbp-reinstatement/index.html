@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Which documents match your Google Business Profile suspension</title>
+<meta name="description" content="A free in-browser checklist for US local-business owners whose Google Business Profile is suspended: the documents that match your notice, what each must show, and a day 1/3/7/14 chase plan.">
+<link rel="stylesheet" href="../shared/probe.css">
+<script src="config.js"></script>
+</head>
+<body>
+<header class="wrap">
+  <a class="studio" href="../">← <span data-studio-name>The Studio</span></a>
+  <p class="disclaimer" data-disclaimer>Not legal or financial advice. No promise of reinstatement. Drafts only. You file the appeal yourself in Google's tool.</p>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Suspended on Google? Here's which documents match your suspension reason.</h1>
+    <p class="lede">Pick what your notice says and get the matching document list, what each file must show, and a day 1, 3, 7 and 14 chase checklist. It runs in your browser: nothing is uploaded or stored. The paid step is a $249 matched appeal packet, on a waitlist for now.</p>
+  </section>
+
+  <section class="tool" id="tool">
+    <h2>Document match checklist</h2>
+    <form id="tool-form" onsubmit="return false" autocomplete="off">
+      <label>What does your notice say?
+        <select name="reason" id="reason"></select></label>
+      <button type="button" class="primary" id="run">Show my document list</button>
+      <p class="small" style="margin:0">Your selection stays in your browser. We count that the checklist ran and which reason you picked, nothing else.</p>
+    </form>
+    <div id="result" class="result" hidden></div>
+  </section>
+
+  <section class="paid" id="paid">
+    <h2>$249 appeal packet, waitlist</h2>
+    <p>We match your notice to the documents, draft the appeal text and give you a dated chase checklist. Drafts only. You file the appeal yourself in Google's tool. This page has no upload and no payment link, and we never log into Google as you or promise reinstatement.</p>
+    <a class="primary" id="paid-cta" href="#" target="_blank" rel="noopener">Loading…</a>
+    <p class="small" id="paid-note"></p>
+  </section>
+
+  <section class="capture" id="capture">
+    <h2>Email me this checklist</h2>
+    <p class="small">One question so the packet matches what you were actually told.</p>
+    <form id="capture-form" onsubmit="return false">
+      <label>What does your notice say?
+        <select name="notice" id="notice"></select></label>
+      <label>Email <input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></label>
+      <button type="button" class="primary" id="capture-btn">Put me on the list</button>
+      <p class="small" id="capture-msg" aria-live="polite"></p>
+    </form>
+  </section>
+</main>
+
+<footer class="wrap small">
+  <p data-disclaimer-footer></p>
+  <p>A probe from <span data-studio-name>The Studio</span>. Numbers for every probe are public on the <a href="../">dashboard</a>.</p>
+</footer>
+
+<script src="../shared/probe.js"></script>
+<script src="tool.js"></script>
+</body>
+</html>

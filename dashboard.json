@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-11-06",
+  "asOf": "2026-11-09",
   "probes": [
     {
       "slug": "listing-teardown",
@@ -32,6 +32,18 @@
       "status": "live",
       "launched": "2026-11-02",
       "url": "cold-quote-sorter/",
+      "visits": 0,
+      "signups": 0,
+      "customers": 0,
+      "revenue": 0
+    },
+    {
+      "slug": "gbp-reinstatement",
+      "name": "GBP Reinstatement",
+      "offer": "Free document-match checklist for a suspended Google Business Profile; $249 appeal packet (waitlist)",
+      "status": "live",
+      "launched": "2026-11-09",
+      "url": "gbp-reinstatement/",
       "visits": 0,
       "signups": 0,
       "customers": 0,
